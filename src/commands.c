@@ -276,11 +276,13 @@ int evaluate_command(int n_commands, struct single_command (*commands)[512])
   if (n_commands== 1) {
     struct single_command* com = (*commands);
     return process(com);
-  } else {
+  } else if(n_commands>=2){
     struct single_command* com = (*commands);
     struct single_command* com2 = (*commands+1);	
     thread(com,commands);
   }
+  else
+	return 0;
 }
 
 void free_commands(int n_commands, struct single_command (*commands)[512])
