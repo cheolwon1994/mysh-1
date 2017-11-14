@@ -9,7 +9,6 @@
 #include "commands.h"
 #include "built_in.h"
 #include "utils.h"
-#include "signal.h"
 
 
 int main()
@@ -17,9 +16,9 @@ int main()
   char buf[8096];
 
   while (1) {
-    fgets(buf, 8096, stdin);
-	signal(SIGTSTP,catch_sigtstp);
 	signal(SIGINT,catch_sigint);		//시그널 처리함수
+	signal(SIGTSTP,catch_sigtstp);
+    fgets(buf, 8096, stdin);
     struct single_command commands[512];
     int n_commands = 0;
     mysh_parse_command(buf, &n_commands, &commands);
@@ -27,6 +26,7 @@ int main()
     int ret = evaluate_command(n_commands, &commands);
 
     free_commands(n_commands, &commands);
+    memset(buf,0,8096);
     n_commands = 0;
 
     if (ret == 1) {
